@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de alunos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <main class="container">
+        <header class="header">
+            <h1>Cadastro de alunos</h1>
+        </header>
+        <p class="aviso aviso-ok" th:if="${mensagem}" th:text="${mensagem}"></p>
+        <p class="aviso aviso-erro" th:if="${erro}" th:text="${erro}"></p>
+        <form class="formulario" method="post" th:action="@{/aluno}">
+            <div class="campo">
+                <label for="nome">Nome completo: <span>*</span></label>
+                <input type="text" id="nome" name="nome" th:value="${dados?.nome()}" required>
+            </div>
+            <div class="campo">
+                <label for="email">E-mail: <span>*</span></label>
+                <input type="email" id="email" name="email" autocomplete="email" th:value="${dados?.email()}" required>
+            </div>
+            <div class="campo">
+                <label for="ra">RA: <span>*</span></label>
+                <input type="text" id="ra" name="ra" inputmode="numeric" th:value="${dados?.ra()}" required>
+            </div>
+            <fieldset class="campo">
+                <legend>Gênero: <span>*</span></legend>
+                <div class="opcoes">
+                    <label><input type="radio" name="genero" value="feminino" th:checked="${dados?.genero() == 'feminino'}" required> Feminino</label>
+                    <label><input type="radio" name="genero" value="masculino" th:checked="${dados?.genero() == 'masculino'}" required> Masculino</label>
+                    <label><input type="radio" name="genero" value="nao-informar" th:checked="${dados?.genero() == 'nao-informar'}" required> Prefiro não informar</label>
+                </div>
+            </fieldset>
+            <div class="campo">
+                <label for="curso">Curso: <span>*</span></label>
+                <select id="curso" name="curso" required>
+                    <option value="" selected disabled></option>
+                    <option value="ANALISE_E_DESENVOLVIMENTO_DE_SISTEMAS" th:selected="${dados?.curso()?.name() == 'ANALISE_E_DESENVOLVIMENTO_DE_SISTEMAS'}">Análise e Desenvolvimento de Sistemas</option>
+                    <option value="COMERCIO_EXTERIOR" th:selected="${dados?.curso()?.name() == 'COMERCIO_EXTERIOR'}">Comércio Exterior</option>
+                    <option value="DESENVOLVIMENTO_DE_PRODUTOS_PLASTICOS" th:selected="${dados?.curso()?.name() == 'DESENVOLVIMENTO_DE_PRODUTOS_PLASTICOS'}">Desenvolvimento de Produtos Plásticos</option>
+                    <option value="DESENVOLVIMENTO_DE_SOFTWARE_MULTIPLATAFORMA" th:selected="${dados?.curso()?.name() == 'DESENVOLVIMENTO_DE_SOFTWARE_MULTIPLATAFORMA'}">Desenvolvimento de Software Multiplataforma</option>
+                    <option value="GESTAO_DE_RECURSOS_HUMANOS" th:selected="${dados?.curso()?.name() == 'GESTAO_DE_RECURSOS_HUMANOS'}">Gestão de Recursos Humanos</option>
+                    <option value="GESTAO_EMPRESARIAL" th:selected="${dados?.curso()?.name() == 'GESTAO_EMPRESARIAL'}">Gestão Empresarial</option>
+                    <option value="LOGISTICA" th:selected="${dados?.curso()?.name() == 'LOGISTICA'}">Logística</option>
+                    <option value="POLIMEROS" th:selected="${dados?.curso()?.name() == 'POLIMEROS'}">Polímeros</option>
+                </select>
+            </div>
+            <!-- Semestre vem antes do período: no Comércio Exterior o período depende do semestre. -->
+            <div class="campo">
+                <label for="semestre">Semestre: <span>*</span></label>
+                <select id="semestre" name="semestre" required>
+                    <option value="" selected disabled></option>
+                    <option value="1" th:selected="${dados?.semestre() == 1}">1º semestre</option>
+                    <option value="2" th:selected="${dados?.semestre() == 2}">2º semestre</option>
+                    <option value="3" th:selected="${dados?.semestre() == 3}">3º semestre</option>
+                    <option value="4" th:selected="${dados?.semestre() == 4}">4º semestre</option>
+                    <option value="5" th:selected="${dados?.semestre() == 5}">5º semestre</option>
+                    <option value="6" th:selected="${dados?.semestre() == 6}">6º semestre</option>
+                    <option value="7" th:selected="${dados?.semestre() == 7}">7º semestre</option>
+                    <option value="8" th:selected="${dados?.semestre() == 8}">8º semestre</option>
+                    <option value="9" th:selected="${dados?.semestre() == 9}">9º semestre</option>
+                    <option value="10" th:selected="${dados?.semestre() == 10}">10º semestre</option>
+                </select>
+            </div>
+            <fieldset class="campo">
+                <legend>Período: <span>*</span></legend>
+                <div class="opcoes">
+                    <label><input type="radio" name="periodo" value="MATUTINO" th:checked="${dados?.periodo()?.name() == 'MATUTINO'}" required> Manhã</label>
+                    <label><input type="radio" name="periodo" value="VESPERTINO" th:checked="${dados?.periodo()?.name() == 'VESPERTINO'}" required> Tarde</label>
+                    <label><input type="radio" name="periodo" value="NOTURNO" th:checked="${dados?.periodo()?.name() == 'NOTURNO'}" required> Noite</label>
+                    <label><input type="radio" name="periodo" value="EAD" th:checked="${dados?.periodo()?.name() == 'EAD'}" required> EaD (à distância)</label>
+                </div>
+                <small id="dica-periodo" class="dica">Selecione o curso para ver os períodos disponíveis.</small>
+            </fieldset>
+            <div class="campo">
+                <label for="nascimento">Data de nascimento: <span>*</span></label>
+                <input type="text" id="nascimento" name="nascimento" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" autocomplete="bday" th:value="${dados?.nascimento() != null} ? ${#temporals.format(dados.nascimento(), 'dd/MM/yyyy')} : ''" required>
+            </div>
+            <div class="campo">
+                <label for="etnia">Etnia: <span>*</span></label>
+                <select id="etnia" name="etnia" required>
+                    <option value="" selected disabled></option>
+                    <option value="branca" th:selected="${dados?.etnia() == 'branca'}">Branca</option>
+                    <option value="preta" th:selected="${dados?.etnia() == 'preta'}">Preta</option>
+                    <option value="parda" th:selected="${dados?.etnia() == 'parda'}">Parda</option>
+                    <option value="amarela" th:selected="${dados?.etnia() == 'amarela'}">Amarela</option>
+                    <option value="indigena" th:selected="${dados?.etnia() == 'indigena'}">Indígena</option>
+                    <option value="nao-informar" th:selected="${dados?.etnia() == 'nao-informar'}">Prefiro não informar</option>
+                </select>
+            </div>
+            <fieldset class="campo">
+                <legend>Nível de escolaridade: <span>*</span></legend>
+                <div class="opcoes">
+                    <label><input type="radio" name="escolaridade" value="medio" th:checked="${dados?.escolaridade() == 'medio'}" required> Ensino médio</label>
+                    <label><input type="radio" name="escolaridade" value="tecnico" th:checked="${dados?.escolaridade() == 'tecnico'}" required> Ensino técnico</label>
+                    <label><input type="radio" name="escolaridade" value="superior" th:checked="${dados?.escolaridade() == 'superior'}" required> Ensino superior</label>
+                    <label><input type="radio" name="escolaridade" value="pos" th:checked="${dados?.escolaridade() == 'pos'}" required> Pós-graduação</label>
+                </div>
+            </fieldset>
+            <fieldset class="campo">
+                <legend>Como ficou sabendo do curso? <span>*</span></legend>
+                <div class="opcoes">
+                    <label><input type="radio" name="comoSoube" value="internet" th:checked="${dados?.comoSoube() == 'internet'}" required> Internet</label>
+                    <label><input type="radio" name="comoSoube" value="redes" th:checked="${dados?.comoSoube() == 'redes'}" required> Redes sociais</label>
+                    <label><input type="radio" name="comoSoube" value="amigos" th:checked="${dados?.comoSoube() == 'amigos'}" required> Amigos/familiares</label>
+                    <label><input type="radio" name="comoSoube" value="escola" th:checked="${dados?.comoSoube() == 'escola'}" required> Escola</label>
+                    <label><input type="radio" name="comoSoube" value="outros" th:checked="${dados?.comoSoube() == 'outros'}" required> Outros</label>
+                </div>
+            </fieldset>
+            <div class="campo campo-textarea">
+                <label for="outros">Caso tenha selecionado "outros", como foi?</label>
+                <textarea id="outros" name="outros" th:text="${dados?.outros()}"></textarea>
+            </div>
+            <fieldset class="campo">
+                <legend>Renda familiar: <span>*</span></legend>
+                <div class="opcoes">
+                    <label><input type="radio" name="renda" value="ate-1" th:checked="${dados?.renda() == 'ate-1'}" required> Até 1 salário mínimo</label>
+                    <label><input type="radio" name="renda" value="1-3" th:checked="${dados?.renda() == '1-3'}" required> De 1 a 3 salários mínimos</label>
+                    <label><input type="radio" name="renda" value="3-5" th:checked="${dados?.renda() == '3-5'}" required> De 3 a 5 salários mínimos</label>
+                    <label><input type="radio" name="renda" value="5-10" th:checked="${dados?.renda() == '5-10'}" required> De 5 a 10 salários mínimos</label>
+                    <label><input type="radio" name="renda" value="mais-10" th:checked="${dados?.renda() == 'mais-10'}" required> Mais de 10 salários mínimos</label>
+                </div>
+            </fieldset>
+            <div class="campo">
+                <label for="cep">CEP: <span>*</span></label>
+                <input type="text" id="cep" name="cep" inputmode="numeric" maxlength="9" autocomplete="postal-code" th:value="${dados?.cep()}" required>
+                <small id="cidade-cep" class="dica"></small>
+            </div>
+            <!-- Cidade e Estado são preenchidos sozinhos pelo CEP (cep.js). Se a consulta falhar, ficam editáveis. -->
+            <div class="campo">
+                <label for="cidade">Cidade: <span>*</span></label>
+                <input type="text" id="cidade" name="cidade" th:value="${dados?.cidade()}" readonly required>
+            </div>
+            <div class="campo">
+                <label for="estado">Estado (UF): <span>*</span></label>
+                <input type="text" id="estado" name="estado" maxlength="2" th:value="${dados?.estado()}" readonly required>
+            </div>
+            <fieldset class="campo">
+                <legend>Possui alguma deficiência?</legend>
+                <div class="opcoes">
+                    <label><input type="radio" name="deficiencia" value="sim" th:checked="${dados?.deficiencia() == 'sim'}"> Sim</label>
+                    <label><input type="radio" name="deficiencia" value="nao" th:checked="${dados?.deficiencia() == 'nao'}"> Não</label>
+                </div>
+            </fieldset>
+            <div class="acoes">
+                <button type="submit" class="btn salvar">💾 Salvar dados</button>
+                <button type="reset" class="btn limpar">📝 Limpar dados</button>
+            </div>
+        </form>
+    </main>
+    <script th:src="@{/js/cep.js}"></script>
+    <script th:src="@{/js/formulario.js}"></script>
+</body>
+</html>

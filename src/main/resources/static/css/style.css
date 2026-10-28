@@ -1,0 +1,272 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #111;
+    padding: 32px 20px 48px;
+}
+
+.container {
+    width: min(915px, 100%);
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.header {
+    height: 47px;
+    background: #df0000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header h1 {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.formulario {
+    padding: 16px 30px 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+    row-gap: 16px;
+}
+
+.campo {
+    min-width: 0;
+}
+
+.campo label {
+    display: block;
+    font-size: 17px;
+    line-height: 21px;
+    margin-bottom: 7px;
+}
+
+.campo label span {
+    color: #f00000;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+    width: 100%;
+    border: 2px solid #c6c6c6;
+    border-radius: 7px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+}
+
+.campo input,
+.campo select {
+    height: 37px;
+}
+
+.campo input {
+    padding: 0 11px;
+}
+
+.campo select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0 42px 0 11px;
+    cursor: pointer;
+    background-image:
+        linear-gradient(45deg, transparent 50%, #bdbdbd 50%),
+        linear-gradient(135deg, #bdbdbd 50%, transparent 50%);
+    background-position:
+        calc(100% - 17px) 15px,
+        calc(100% - 10px) 15px;
+    background-size: 8px 8px, 8px 8px;
+    background-repeat: no-repeat;
+}
+
+.campo textarea {
+    height: 119px;
+    resize: none;
+    padding: 9px 11px;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+    border-color: #999;
+}
+
+.campo input::placeholder {
+    color: #8a8a8a;
+    opacity: 1;
+}
+
+/* ---- posicionamento ----
+   Antes cada campo era colocado "na mão" (nth-child). Com os campos novos isso
+   desalinhava tudo, então agora o grid distribui sozinho, dois campos por linha
+   (o textarea "outros" fica ao lado de "Como ficou sabendo") e os botões na coluna da direita. */
+
+.formulario > .acoes {
+    grid-column: 2;
+}
+
+.acoes {
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+}
+
+.btn {
+    flex: 1;
+    min-width: 0;
+    height: 62px;
+    border: 0;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    filter: brightness(0.94);
+}
+
+.salvar {
+    background: #df0000;
+    color: #fff;
+}
+
+.limpar {
+    background: #d9d9d9;
+    color: #111;
+}
+
+@media (max-width: 760px) {
+    body {
+        padding: 15px;
+    }
+
+    .formulario {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .formulario > .campo,
+    .formulario > .acoes {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+    }
+
+    .campo textarea {
+        height: 110px;
+    }
+
+    .acoes {
+        gap: 12px;
+    }
+
+    .btn {
+        height: 48px;
+    }
+}
+
+/* ---- acrescentado para o back-end ---- */
+.aviso {
+    margin: 16px 30px 0;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.aviso-ok {
+    background: #e8f5e9;
+    border: 1px solid #9ccc9f;
+}
+
+.aviso-erro {
+    background: #fdecea;
+    border: 1px solid #e5a5a5;
+    color: #9b0000;
+}
+
+/* textinho de apoio embaixo do campo (CEP e períodos disponíveis) */
+.campo .cidade,
+.campo .dica {
+    display: block;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* ---- grupos de radio (gênero, período, escolaridade, como soube, renda, deficiência) ---- */
+fieldset.campo {
+    border: 0;
+}
+
+/* a legenda faz o papel do "label" e usa o mesmo visual dele */
+.campo legend {
+    font-size: 17px;
+    line-height: 21px;
+    margin-bottom: 7px;
+}
+
+.campo legend span {
+    color: #f00000;
+}
+
+.opcoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+}
+
+.campo .opcoes label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* desfaz o estilo de caixa de texto (largura 100%, altura 37px, borda) que os radios herdariam de ".campo input" */
+.campo .opcoes input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    padding: 0;
+    border: 0;
+    accent-color: #df0000;
+    cursor: pointer;
+}
+
+/* ".campo input" tira o outline; aqui devolvemos para quem navega pelo teclado */
+.campo .opcoes input[type="radio"]:focus-visible {
+    outline: 2px solid #999;
+    outline-offset: 2px;
+}
+
+/* período que o curso escolhido não oferece fica escondido (o JS põe o atributo hidden) */
+.campo .opcoes label[hidden] {
+    display: none;
+}
+
+/* sem texto, a dica não ocupa espaço */
+.campo .dica:empty {
+    display: none;
+}
+
+/* cidade e estado preenchidos pelo CEP */
+.campo input[readonly] {
+    background: #f1f1f1;
+}
